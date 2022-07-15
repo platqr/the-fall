@@ -2,63 +2,97 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-  private float speed = 10f;
-  [SerializeField] private float gravity = 9.8f;
-  [SerializeField] private Rigidbody rb;
-  [SerializeField] private LayerMask FloorLayerMask;
+  private Rigidbody rb;
+  private float time = 0;
 
-  [SerializeField] private float initJumpForce = 40f;
-  [SerializeField] private float jumpForce;
-  [SerializeField] private float jumpDamp = 70f;
+  [SerializeField] private float speed = 10f;
+
+  [SerializeField] private float gravity = 20f;
+	[SerializeField] private float initJumpForce = 60f;
+  private float jumpForce;
+	[SerializeField] private float maxJumpHeight = 6f;
+
+  [SerializeField] private LayerMask floorLayerMask;
+	[SerializeField] private LayerMask pointLayerMask;
+
   private bool isJumping = false;
 
-  private float time = 0;
+  private void Awake()
+  {
+    rb = transform.GetComponent<Rigidbody>();
+  }
 
   private void Update()
   {
     time += Time.deltaTime;
+    HandleJump();
+
+		Reset();
+  }
+
+  private void FixedUpdate() {
+    Gravity();
     Movement();
     Jump();
-    Gravity();
   }
 
   private void  Gravity()
   {  
     if (!isGrounded())
     {
-      transform.Translate(Vector3.forward * gravity * Time.deltaTime, Space.World);
       rb.position += Vector3.forward * gravity * Time.deltaTime;
     }
+		else
+		{
+			rb.position = new Vector3(transform.position.x,transform.position.y,0);
+		}
   }
 
   private void Movement()
   {
     float xInput = Input.GetAxisRaw("Horizontal");
     float yInput = Input.GetAxisRaw("Vertical");
-    transform.Translate(new Vector3(xInput, yInput, 0) * speed * Time.deltaTime, Space.World);
+    rb.position += new Vector3(xInput, yInput, 0).normalized * speed * Time.deltaTime;
+  }
+
+  private void HandleJump()
+  {
+    if (Input.GetKeyDown(KeyCode.K) && isGrounded() && !makePoint() || makePoint())
+    {
+      isJumping = true;
+    }
   }
 
   private void Jump()
   {
-    if (Input.GetKeyDown(KeyCode.K))
+		jumpForce = -((-rb.position.z - maxJumpHeight)/(maxJumpHeight/initJumpForce));
+
+    if (isJumping)
     {
-      isJumping = true;
-    }
-    if (isJumping  && jumpForce > 0)
-    {
-      jumpForce -= Time.deltaTime * jumpDamp; 
-      transform.Translate(Vector3.back * jumpForce * Time.deltaTime, Space.World);
-    }
-    if (isGrounded())
-    {
-      jumpForce = initJumpForce;
-      isJumping = false;
+      rb.position += Vector3.back * jumpForce * Time.deltaTime;
+			if (jumpForce <= gravity+1)
+			{
+				isJumping = false;
+			}
     }
   }
 
+	private void Reset() {
+		if (Input.GetKeyDown(KeyCode.R))
+		{
+			rb.position = new Vector3(0,0,-4f);
+			isJumping=false;
+		}
+	}
+
   private bool isGrounded()
   {
-    return Physics.BoxCast(transform.position, new Vector3(2f,2f,.75f) * .2f, Vector3.forward, Quaternion.identity, .5f, FloorLayerMask);
+    return Physics.BoxCast(transform.position, new Vector3(2f,2f,.75f) * .2f, Vector3.forward, Quaternion.identity, .5f, floorLayerMask);
+  }
+
+	private bool makePoint()
+  {
+    return Physics.BoxCast(transform.position, new Vector3(2f,2f,.75f) * .2f, Vector3.forward, Quaternion.identity, .5f, pointLayerMask);
   }
   
 }
