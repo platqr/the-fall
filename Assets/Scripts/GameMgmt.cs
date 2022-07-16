@@ -18,7 +18,7 @@ public class GameMgmt : MonoBehaviour
     playerScript = player.GetComponent<Player>();
   }
 
-  void Update()
+  private void Update()
   {
     time += Time.deltaTime;
     Reset();

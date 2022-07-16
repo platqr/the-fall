@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class Shadow : MonoBehaviour
 {
-    [SerializeField] private GameObject player;
+    private GameObject player;
 		private SpriteRenderer rndrr;
 		[SerializeField] private Color shadowColor;
 
 		private void Awake() {
 			rndrr = transform.GetComponent<SpriteRenderer>();
+			player = player = GameObject.Find("Player");
 		}
 
-    void Update()
+    private void Update()
     {
 			transform.position = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
 			if (detectFloor() && player.transform.position.z < transform.position.z)

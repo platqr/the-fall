@@ -95,5 +95,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 992826ec7f279894da7907dca28486c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
   shadowColor: {r: 0, g: 0, b: 0, a: 0.2509804}
