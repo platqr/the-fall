@@ -5,7 +5,7 @@ public class Player : MonoBehaviour
   private Rigidbody rb;
   private float time = 0;
 
-  private float speed = 10f;
+  private float speed = 12f;
 	private float jumpForce;
   [SerializeField] private float gravity = 20f;
 	[SerializeField] private float initJumpForce = 60f;
@@ -35,7 +35,7 @@ public class Player : MonoBehaviour
 
 	private void HandleJump()
   {
-    if (Input.GetKeyDown(KeyCode.K) && isGrounded() && !onPointer() || onPointer())
+    if (Input.GetKeyDown(KeyCode.I) && isGrounded() && !onPointer() || onPointer())
     {
       isJumping = true;
     }
