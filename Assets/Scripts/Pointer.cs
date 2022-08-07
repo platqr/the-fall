@@ -6,37 +6,70 @@ public class Pointer : MonoBehaviour
 {
 	private float speed = 12;
 	private Vector3 newDirection;
+	private Vector3 lastDirection;
 
 	private void Start() 
 	{
 		Random.InitState(System.DateTime.Now.Millisecond);
 		newDirection = new Vector3(Random.Range(-1f,1f), Random.Range(-1f,1f), 0);
+		lastDirection = transform.position;
 	}
 
 	private void Update()
 	{
 		transform.position += newDirection.normalized * speed * Time.deltaTime;
 		ChangeDirection();
-		//transform.position = new Vector3(Mathf.Clamp(transform.position.x, -12f, 12f), Mathf.Clamp(transform.position.y, -9f, 9f), transform.position.z);
 	}
 
 	private void ChangeDirection()
 	{
-		if(transform.position.x >= 13f)
+		if(transform.position.x >= 11.45f)
 		{
-			newDirection = new Vector3(Random.Range(-1f,0f), Random.Range(-1f,1f), 0);
+			if (lastDirection.y >= transform.position.y)
+			{
+				newDirection = new Vector3(-0.5f,-0.5f, 0);
+			}
+			else
+			{
+				newDirection = new Vector3(-0.5f,0.5f, 0);
+			}
+			lastDirection = transform.position;
 		}
-		if (transform.position.x <= -13f)
+		if (transform.position.x <= -11.45f)
 		{
-			newDirection = new Vector3(Random.Range(0f,1f), Random.Range(-1f,1f), 0);
+			if (lastDirection.y >= transform.position.y)
+			{
+				newDirection = new Vector3(0.5f,-0.5f, 0);
+			}
+			else
+			{
+				newDirection = new Vector3(0.5f,0.5f, 0);
+			}
+			lastDirection = transform.position;
 		}
-		if (transform.position.y <= -10f)
+		if(transform.position.y >= 9.1f)
 		{
-			newDirection = new Vector3(Random.Range(-1f,1f), Random.Range(0f,1f), 0);
+			if (lastDirection.x >= transform.position.x)
+			{
+				newDirection = new Vector3(-0.5f,-0.5f, 0);
+			}
+			else
+			{
+				newDirection = new Vector3(0.5f,-0.5f, 0);
+			}
+			lastDirection = transform.position;
 		}
-		if(transform.position.y >= 10f)
+		if (transform.position.y <= -8.1f)
 		{
-			newDirection = new Vector3(Random.Range(-1f,1f), Random.Range(-1f,0f), 0);
+			if (lastDirection.x >= transform.position.x)
+			{
+				newDirection = new Vector3(-0.5f,0.5f, 0);
+			}
+			else
+			{
+				newDirection = new Vector3(0.5f,0.5f, 0);
+			}
+			lastDirection = transform.position;
 		}
 	}
 }

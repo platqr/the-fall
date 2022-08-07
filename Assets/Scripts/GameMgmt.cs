@@ -22,7 +22,6 @@ public class GameMgmt : MonoBehaviour
   {
     time += Time.deltaTime;
     Reset();
-    ChangePerspective();
     Score();
   }
 
@@ -42,12 +41,4 @@ public class GameMgmt : MonoBehaviour
       playerScript.Reset();
     }
 	}
-
-  private void ChangePerspective()
-  {
-    if (Input.GetKeyDown(KeyCode.P))
-    {
-      Camera.main.orthographic = !Camera.main.orthographic;
-    }
-  }
 }
