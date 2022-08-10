@@ -1,7 +1,7 @@
 using UnityEngine;
 
-public class Player : MonoBehaviour
-{
+public class Player : MonoBehaviour {
+
   private Rigidbody rb;
   private float time = 0;
 
@@ -16,13 +16,11 @@ public class Player : MonoBehaviour
 
   private bool isJumping = false;
 
-  private void Awake()
-  {
+  private void Awake() {
     rb = transform.GetComponent<Rigidbody>();
   }
 
-  private void Update()
-  {
+  private void Update() {
     time += Time.deltaTime;
     HandleJump();
   }
@@ -33,54 +31,44 @@ public class Player : MonoBehaviour
     Jump();
   }
 
-	private void HandleJump()
-  {
-    if (Input.GetKeyDown(KeyCode.I) && isGrounded() && !onPointer() || onPointer())
-    {
+	private void HandleJump() {
+    if (Input.GetKeyDown(KeyCode.I) && isGrounded() && !onPointer() || onPointer()) {
       isJumping = true;
     }
   }
 
-  private void  Gravity()
-  {  
-    if (!isGrounded())
-    {
+  private void  Gravity() {  
+    if (!isGrounded()) {
       rb.position += Vector3.forward * gravity * Time.deltaTime;
     }
-		else
-		{
+		else {
 			rb.position = new Vector3(transform.position.x,transform.position.y,0);
 		}
   }
 
-  private void Movement()
-  {
+  private void Movement() {
     float xInput = Input.GetAxisRaw("Horizontal");
     float yInput = Input.GetAxisRaw("Vertical");
     rb.position += new Vector3(xInput, yInput, 0).normalized * speed * Time.deltaTime;
+    
   }
 
-  private void Jump()
-  {
+  private void Jump() {
 		jumpForce = -((-rb.position.z - maxJumpHeight)/(maxJumpHeight/initJumpForce));
 
-    if (isJumping)
-    {
+    if (isJumping) {
       rb.position += Vector3.back * jumpForce * Time.deltaTime;
-			if (jumpForce <= gravity+1)
-			{
+			if (jumpForce <= gravity+1)	{
 				isJumping = false;
 			}
     }
   }
 
-  private bool isGrounded()
-  {
+  private bool isGrounded() {
     return Physics.BoxCast(transform.position, new Vector3(2f,2f,.75f) * .2f, Vector3.forward, Quaternion.identity, 1f, floorLayerMask);
   }
 
-	public bool onPointer()
-  {
+	public bool onPointer() {
     return Physics.BoxCast(transform.position, new Vector3(2f,2f,.75f) * .2f, Vector3.forward, Quaternion.identity, .5f, pointLayerMask);
   }
 
