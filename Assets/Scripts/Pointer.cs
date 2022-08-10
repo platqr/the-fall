@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Pointer : MonoBehaviour {
 
-	private float speed = 12;
+	private float speed = 14;
 	private Vector3 newDirection;
 	private Vector3 lastDirection;
 

@@ -10,14 +10,18 @@ public class GameMgmt : MonoBehaviour {
   private Player playerScript;
   private TMP_Text scoreText;
   private TMP_Text livesText;
+  private TMP_Text IdleText;
   private GameObject gameOverScreen;
 
   private float time = 0;
   
   private int score = 0;
   private int lives = 4;
+
   private float scoreTimer = 0f;
   private float scoreCoolDown = .5f;
+
+  private float idleTimer = 4f;
 
   private float livesTimer = 0f;
   private float livesCoolDown = .5f;
@@ -28,6 +32,7 @@ public class GameMgmt : MonoBehaviour {
     playerScript = player.GetComponent<Player>();
     scoreText = GameObject.Find("Score Text").GetComponent<TMP_Text>();
     livesText = GameObject.Find("Lives Text").GetComponent<TMP_Text>();
+    IdleText = GameObject.Find("Idle Text").GetComponent<TMP_Text>();
     gameOverScreen = GameObject.Find("Game Over Screen");
     gameOverScreen.SetActive(false);
   }
@@ -35,8 +40,13 @@ public class GameMgmt : MonoBehaviour {
   private void Update() {
     time += Time.deltaTime;
     Score();
+    Idle();
     Death();
     Reset();
+    if (Input.GetKeyDown(KeyCode.N))
+    {
+      GameOver();
+    }
   }
 
   private void Start() {
@@ -47,6 +57,7 @@ public class GameMgmt : MonoBehaviour {
   public void Score() {
     if (playerScript.onPointer() && (time - scoreTimer) >= scoreCoolDown) {
       score++;
+      idleTimer = 4f;
       scoreTimer = time;
       scoreText.text = "Score: " + score;
     }
@@ -61,14 +72,35 @@ public class GameMgmt : MonoBehaviour {
         playerScript.Reset();
       }
       else {
-        lives--;
-        gameOverScreen.SetActive(true);
-        pointer.SetActive(false);
-        player.transform.position = new Vector3(50,0,-50f);
-        player.SetActive(false);
+        GameOver();
       }
     }
 	}
+
+  private void GameOver() {
+    lives=-1;
+    gameOverScreen.SetActive(true);
+    pointer.SetActive(false);
+    player.transform.position = new Vector3(50,0,-50f);
+    player.SetActive(false);
+    idleTimer = 0; 
+    IdleText.text = "0";
+  }
+
+  private void Idle() {
+    if (idleTimer > 0) {
+      idleTimer -= Time.deltaTime;
+      IdleText.text = idleTimer.ToString("#.00");
+    }
+    else {
+      idleTimer = 0; 
+      IdleText.text = "0";
+    }
+    if (idleTimer <= 0)
+    {
+      GameOver();
+    }
+  }
 
   private void Reset() {
     if (lives < 0 && Input.GetKeyDown(KeyCode.R)) {
@@ -79,6 +111,7 @@ public class GameMgmt : MonoBehaviour {
       playerScript.Reset();
       lives = 4;
       score = 0;
+      idleTimer = 4f;
       livesText.text = "Lives: " + lives;
       scoreText.text = "Score: " + score;
     }
