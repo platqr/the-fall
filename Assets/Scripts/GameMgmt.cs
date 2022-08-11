@@ -8,6 +8,7 @@ public class GameMgmt : MonoBehaviour {
   private GameObject player;
   private GameObject pointer;
   private Player playerScript;
+  private Pointer pointerScript;
   private TMP_Text scoreText;
   private TMP_Text livesText;
   private TMP_Text IdleText;
@@ -21,7 +22,7 @@ public class GameMgmt : MonoBehaviour {
   private float scoreTimer = 0f;
   private float scoreCoolDown = .5f;
 
-  private float idleTimer = 4f;
+  private float idleTimer = 6f;
 
   private float livesTimer = 0f;
   private float livesCoolDown = .5f;
@@ -30,6 +31,7 @@ public class GameMgmt : MonoBehaviour {
     player = GameObject.Find("Player");
     pointer = GameObject.Find("Pointer");
     playerScript = player.GetComponent<Player>();
+    pointerScript = pointer.GetComponent<Pointer>();
     scoreText = GameObject.Find("Score Text").GetComponent<TMP_Text>();
     livesText = GameObject.Find("Lives Text").GetComponent<TMP_Text>();
     IdleText = GameObject.Find("Idle Text").GetComponent<TMP_Text>();
@@ -57,8 +59,9 @@ public class GameMgmt : MonoBehaviour {
   public void Score() {
     if (playerScript.onPointer() && (time - scoreTimer) >= scoreCoolDown) {
       score++;
-      idleTimer = 4f;
+      idleTimer = 6f;
       scoreTimer = time;
+      pointerScript.RandomizeSpeed();
       scoreText.text = "Score: " + score;
     }
   }
@@ -109,9 +112,10 @@ public class GameMgmt : MonoBehaviour {
       pointer.transform.position = new Vector3(0,5,0.48f);
       player.SetActive(true);
       playerScript.Reset();
+      pointerScript.ResetSpeed();
       lives = 4;
       score = 0;
-      idleTimer = 4f;
+      idleTimer = 6f;
       livesText.text = "Lives: " + lives;
       scoreText.text = "Score: " + score;
     }
