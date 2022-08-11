@@ -9,6 +9,7 @@ public class GameMgmt : MonoBehaviour {
   private GameObject pointer;
   private Player playerScript;
   private Pointer pointerScript;
+  private AudioMgmt audioManager;
   private TMP_Text scoreText;
   private TMP_Text livesText;
   private TMP_Text IdleText;
@@ -27,11 +28,14 @@ public class GameMgmt : MonoBehaviour {
   private float livesTimer = 0f;
   private float livesCoolDown = .5f;
 
+  private bool playerIsDead = false;
+
   private void Awake() {
     player = GameObject.Find("Player");
     pointer = GameObject.Find("Pointer");
     playerScript = player.GetComponent<Player>();
     pointerScript = pointer.GetComponent<Pointer>();
+    audioManager = GameObject.Find("Audio Manager").GetComponent<AudioMgmt>();
     scoreText = GameObject.Find("Score Text").GetComponent<TMP_Text>();
     livesText = GameObject.Find("Lives Text").GetComponent<TMP_Text>();
     IdleText = GameObject.Find("Idle Text").GetComponent<TMP_Text>();
@@ -63,6 +67,7 @@ public class GameMgmt : MonoBehaviour {
       scoreTimer = time;
       pointerScript.RandomizeSpeed();
       scoreText.text = "Score: " + score;
+      audioManager.PlayPointSfx();
     }
   }
 
@@ -73,6 +78,7 @@ public class GameMgmt : MonoBehaviour {
         livesTimer = time;
         livesText.text = "Lives: " + lives;
         playerScript.Reset();
+        audioManager.PlayFallSfx();
       }
       else {
         GameOver();
@@ -81,13 +87,19 @@ public class GameMgmt : MonoBehaviour {
 	}
 
   private void GameOver() {
-    lives=-1;
-    gameOverScreen.SetActive(true);
-    pointer.SetActive(false);
-    player.transform.position = new Vector3(50,0,-50f);
-    player.SetActive(false);
-    idleTimer = 0; 
-    IdleText.text = "0";
+    if (!playerIsDead)
+    {
+      lives=-1;
+      gameOverScreen.SetActive(true);
+      pointer.SetActive(false);
+      player.transform.position = new Vector3(50,0,-50f);
+      player.SetActive(false);
+      idleTimer = 0; 
+      IdleText.text = "0";
+      audioManager.PlayGameOverSfx();
+      audioManager.PlayGameOverMusic();
+      playerIsDead = true;
+    }
   }
 
   private void Idle() {
@@ -116,8 +128,10 @@ public class GameMgmt : MonoBehaviour {
       lives = 4;
       score = 0;
       idleTimer = 6f;
+      audioManager.PlayGameMusic();
       livesText.text = "Lives: " + lives;
       scoreText.text = "Score: " + score;
+      playerIsDead = false;
     }
   }
 }

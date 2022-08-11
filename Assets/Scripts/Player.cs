@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
-  private Rigidbody rb;
   private float time = 0;
 
   private float speed = 12f;
@@ -16,8 +15,12 @@ public class Player : MonoBehaviour {
 
   private bool isJumping = false;
 
+  private Rigidbody rb;
+  private AudioMgmt audioManager;
+
   private void Awake() {
     rb = transform.GetComponent<Rigidbody>();
+    audioManager = GameObject.Find("Audio Manager").GetComponent<AudioMgmt>();
   }
 
   private void Update() {
@@ -32,7 +35,12 @@ public class Player : MonoBehaviour {
   }
 
 	private void HandleJump() {
-    if (Input.GetKeyDown(KeyCode.I) && isGrounded() && !onPointer() || onPointer()) {
+    if (Input.GetKeyDown(KeyCode.I) && isGrounded() && !onPointer()) {
+      isJumping = true;
+      audioManager.PlayJumpSfx();
+    }
+    if (onPointer())
+    {
       isJumping = true;
     }
   }
