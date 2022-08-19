@@ -49,7 +49,7 @@ public class GameMgmt : MonoBehaviour {
     Idle();
     Death();
     Reset();
-    if (Input.GetKeyDown(KeyCode.N))
+    if (Input.GetKeyDown(KeyCode.Escape))
     {
       GameOver();
     }
