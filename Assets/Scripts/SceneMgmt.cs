@@ -19,6 +19,10 @@ public class SceneMgmt : MonoBehaviour {
             {
                 SceneManager.LoadScene(3);
             }
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Application.Quit();
+            }
         }
         if (SceneManager.GetActiveScene().buildIndex != 0)
         {

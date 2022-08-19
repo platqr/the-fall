@@ -35,7 +35,7 @@ public class Player : MonoBehaviour {
   }
 
 	private void HandleJump() {
-    if (Input.GetKeyDown(KeyCode.I) && isGrounded() && !onPointer()) {
+    if (Input.GetKeyDown(KeyCode.Space) && isGrounded() && !onPointer()) {
       isJumping = true;
       audioManager.PlayJumpSfx();
     }
