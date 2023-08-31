@@ -1,0 +1,107 @@
+@startuml
+
+class MonoBehaviour
+
+class AudioMgmt {
+	- gameMusic: AudioSource
+	- gameOverMusic: AudioSource
+	- jumpSfx: AudioSource
+	- pointSfx: AudioSource
+	- fallSfx: AudioSource
+	- gameOverSfx: AudioSource
+
+	+ PlayGameMusic()
+	+ PlayGameOverMusic()
+	+ PlayJumpSfx()
+	+ PlayPointSfx()
+	+ PlayFallSfx()
+	+ PlayGameOverSfx()
+}
+
+class GameMgmt {
+	- player: GameObject
+	- pointer: GameObject
+	- playerScript: Player
+	- pointerScript: Pointer
+	- audioManager: AudioMgmt
+	- scoreText: TMP_Text
+	- livesText: TMP_Text
+	- IdleText: TMP_Text
+	- gameOverScreen: GameObject
+	- time: float
+	- score: int
+	- lives: int
+	- scoreTimer: float
+	- scoreCoolDown: float
+	- idleTimer: float
+	- livesTimer: float
+	- livesCoolDown: float
+	- playerIsDead: bool
+
+	- Awake()
+	- Update()
+	- Start()
+	- Score()
+	- Death()
+	- GameOver()
+	- Idle()
+	- Reset()
+}
+
+class Player {
+	- time: float
+	- speed: float
+	- jumpForce: float
+	- gravity: float
+	- initJumpForce: float
+	- maxJumpHeight: float
+	- isJumping: bool
+	- rb: Rigidbody
+	- audioManager: AudioMgmt
+
+	- Awake()
+	- Update()
+	- FixedUpdate()
+	- HandleJump()
+	- Gravity()
+	- Movement()
+	- Jump()
+	- isGrounded(): bool
+	+ onPointer(): bool
+	+ Reset()
+}
+
+class Pointer {
+	- speed: float
+	- newDirection: Vector3
+	- lastDirection: Vector3
+
+	- Start()
+	- Update()
+	- ChangeDirection()
+	+ RandomizeSpeed()
+	+ ResetSpeed()
+}
+
+class SceneMgmt {
+	- Update()
+}
+
+class Shadow {
+    - player: GameObject
+    - rndrr: SpriteRenderer
+    - shadowColor: Color
+
+    - Awake()
+    - Update()
+    - detectFloor(): bool
+}
+
+MonoBehaviour <|-- AudioMgmt
+MonoBehaviour <|-- Player
+MonoBehaviour <|-- GameMgmt
+MonoBehaviour <|-- Pointer
+MonoBehaviour <|-- SceneMgmt
+MonoBehaviour <|-- Shadow
+
+@enduml
